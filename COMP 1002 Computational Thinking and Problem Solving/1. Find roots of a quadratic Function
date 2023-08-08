@@ -1,0 +1,23 @@
+def main():
+    print ("The programme is to calculate the root(s) of the quadratic equation,ax^2+bx+c=0.")
+
+    a=eval(input("Please enter the value a. >>"))
+    b=eval(input("Please enter the value b. >>"))
+    c=eval(input("Please enter the value c. >>"))
+    
+    d=b**2-4*a*c
+
+    if d<0:
+        print("Invalid input.")
+
+    elif d==0:
+        r = float(-b/(2*a))
+        print("There is only one root:",r)
+   
+    else:
+        x = float(-b+d**0.5)/(2*a)
+        y = float(-b-d**0.5)/(2*a)
+        print("There are two roots:",(x,y))
+
+main()
+        
