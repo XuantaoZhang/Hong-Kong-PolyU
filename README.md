@@ -3,7 +3,7 @@
 All programming works in my first year of study at the Hong Kong Polytechnic University
 
 # COMP-1002-Programming Assignment
-#The programming language is Python
+The programming language is Python
 1. Find roots of a quadratic Function
 2. Convert Decimal Number to Octal Numer
 3. Max and Sort Function
