@@ -1,0 +1,221 @@
+install.packages("ggplot2")
+library("ggplot2")
+data("iris")
+
+#a(1.4, 0.1)
+#b(1.3, 0.2)
+#c(1.7, 0.1)
+xa=1.4
+ya=0.1
+xb=1.3
+yb=0.2
+xc=1.7
+yc=0.1
+j=0
+j_cluster=c()
+
+#100 iteration. When j=100, it means that it has finished 100 iterations
+while(j<100){
+  a=1
+  b=1
+  c=1
+  distance_1=c()
+  distance_2=c()
+  distance_3=c()
+  cluster_a_distance=c()
+  cluster_a_x=c()
+  cluster_a_y=c()
+  cluster_b_distance=c()
+  cluster_b_x=c()
+  cluster_b_y=c()
+  cluster_c_distance=c()
+  cluster_c_x=c()
+  cluster_c_y=c()
+  
+  #calculate the mean distance. a starts from 1. There are 150 samples
+  while(a<151){
+    x=iris[a,3]
+    y=iris[a,4]
+    a_distance = (xa-x)**2+(ya-y)**2
+    distance_1=c(distance_1,a_distance)
+    
+    b_distance=(xb-x)**2+(yb-y)**2
+    distance_2=c(distance_2,b_distance)
+    
+    c_distance=(xc-x)**2+(yc-y)**2
+    distance_3=c(distance_3,c_distance)
+    
+    a=a+1
+    b=b+1
+    c=c+1}
+  
+  #distance comparison
+  A_count=0
+  B_count=0
+  C_count=0
+  
+  i=1
+  while(i<151){
+    if(distance_1[i]>distance_2[i]){
+      if(distance_3[i]>distance_1[i]){
+        cluster_b_x=c(cluster_b_x,iris[i,3])
+        cluster_b_y=c(cluster_b_y,iris[i,4])
+        cluster_b_distance=c(cluster_b_distance,distance_3[i])
+        B_count=B_count+1
+      }
+      else{
+        if(distance_2[i]>distance_3[i]){
+          cluster_c_x=c(cluster_c_x,iris[i,3])
+          cluster_c_y=c(cluster_c_y,iris[i,4])
+          cluster_c_distance=c(cluster_c_distance,distance_3[i])
+          C_count=C_count+1
+        }
+        else{
+          cluster_b_x=c(cluster_b_x,iris[i,3])
+          cluster_b_y=c(cluster_b_y,iris[i,4])
+          cluster_b_distance=c(cluster_b_distance,distance_2[i])
+          B_count=B_count+1
+        }
+      }
+    }
+    else{
+      if(distance_3[i]>distance_2[i]){
+        cluster_a_x=c(cluster_a_x,iris[i,3])
+        cluster_a_y=c(cluster_a_y,iris[i,4])
+        cluster_a_distance=c(cluster_a_distance,distance_1[i])
+        A_count=A_count+1
+      }
+      else{
+        if(distance_1[i]>distance_3[i]){
+          cluster_c_x=c(cluster_c_x,iris[i,3])
+          cluster_c_y=c(cluster_c_y,iris[i,4])
+          cluster_c_distance=c(cluster_c_distance,distance_3[i])
+          C_count=C_count+1
+        }
+        else{
+          cluster_a_x=c(cluster_a_x,iris[i,3])
+          cluster_a_y=c(cluster_a_y,iris[i,4])
+          cluster_a_distance=c(cluster_a_distance,distance_1[i])
+          A_count=A_count+1
+        }
+      }
+      
+    }
+    i=i+1
+  }
+  
+  #J cluster calculation
+  j_value=0
+  j_sum_a=0
+  A=1
+  j_sum_b=0
+  B=1
+  j_sum_c=0
+  C=1
+  while(A<=A_count){
+    j_sum_a=j_sum_a+(cluster_a_distance[A])
+    A=A+1
+  }
+  while(B<=B_count){
+    j_sum_b=j_sum_b+(cluster_b_distance[B])
+    B=B+1
+  }
+  while(C<=C_count){
+    j_sum_c=j_sum_c+(cluster_c_distance[C])
+    C=C+1
+  }
+  
+  j_value=(j_sum_a+j_sum_b+j_sum_c)/150
+  j_cluster=c(j_cluster,j_value)
+  
+  #New cluster centroids, also the new xa,xb..
+  xA=0
+  yA=0
+  count_a=1
+  while(count_a<=A_count){
+    xA=xA+cluster_a_x[count_a]
+    yA=yA+cluster_a_y[count_a]
+    count_a=count_a+1
+  }
+  
+  xB=0
+  yB=0
+  count_b=1
+  while(count_b<=B_count){
+    xB=xB+cluster_b_x[count_b]
+    yB=yB+cluster_b_y[count_b]
+    count_b=count_b+1
+  }
+  xC=0
+  yC=0
+  count_c=1
+  while(count_c<=C_count){
+    xC=xC+cluster_c_x[count_c]
+    yC=yC+cluster_c_y[count_c]
+    count_c=count_c+1
+  }
+  
+  
+  
+  #values of new cluster centroids
+  xa=xA/A_count
+  ya=yA/A_count
+  xb=xB/B_count
+  yb=yB/B_count
+  xc=xC/C_count
+  yc=yC/C_count
+  
+  j=j+1}
+
+
+#j should become to 100 after 100th iteration
+#After iterations, it is the time to plot
+
+#Clustering dataframe
+clustering_x=c()
+clustering_y=c()
+clustering_classes=c()
+
+a_xy=1
+while(a_xy<=A_count){
+  clustering_x=c(clustering_x,cluster_a_x[a_xy])
+  clustering_y=c(clustering_y,cluster_a_y[a_xy])
+  clustering_classes=c(clustering_classes,'A')
+  a_xy=a_xy+1
+}
+b_xy=1
+while(b_xy<=B_count){
+  clustering_x=c(clustering_x,cluster_b_x[b_xy])
+  clustering_y=c(clustering_y,cluster_b_y[b_xy])
+  clustering_classes=c(clustering_classes,'B')
+  b_xy=b_xy+1
+}
+c_xy=1
+while(c_xy<=C_count){
+  clustering_x=c(clustering_x,cluster_c_x[c_xy])
+  clustering_y=c(clustering_y,cluster_c_y[c_xy])
+  clustering_classes=c(clustering_classes,'C')
+  c_xy=c_xy+1
+}
+clustering=data.frame(clustering_x,clustering_y,clustering_classes)
+names(clustering)=c("petal.length","petal.width","Classes")
+
+#Clustering Ploting
+g_c=ggplot(data=clustering)+
+  geom_point(mapping=aes(x=petal.length, y=petal.width, color=Classes))
+print(g_c)
+
+#Training iteration dataframe
+j_time=c()
+j_t=1
+while(j_t<=j){
+  j_time=c(j_time,j_t)
+  j_t=j_t+1
+}
+iteration=data.frame(j_time,j_cluster)
+names(iteration)=c("training.iteration","mean.distance")
+
+#Training iteration ploting
+g_t=ggplot(data=iteration)+
+  geom_smooth(mapping=aes(x=training.iteration, y=mean.distance))
+print(g_t)
