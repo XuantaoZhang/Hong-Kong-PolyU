@@ -26,6 +26,7 @@ The programming language is C++
 9. Linked List
 
 # COMP-1433-Data-Analytics
+The programming language is R
 1. K-means clustering iris by its spetal length and width
 
    1.1 petal length vs petal width
