@@ -12,3 +12,15 @@ The programming language is Python
 6. Median of petal width for different types flowers (data is from iris)
 
    6.1 (data) iris 2021
+
+# COMP-1101-Problems
+The programming language is C++
+1. Simple Calculator
+2. Christmas Trees
+3. Alternatively Sum
+4. Sorting odd numbers in an increasing order and even numbers in a decreasing order
+5. Find the max, min, total, and average of a sequence of numbers
+6. Sorting name list
+7. Rotate Characters with Pointers
+8. Sorting Name List according to Student ID
+9. Linked List
